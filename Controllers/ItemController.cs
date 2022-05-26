@@ -71,14 +71,14 @@ namespace Catalog.Controller
 
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult DeleteItem(Guid id)
+        [HttpDelete("{this_id}")]
+        public ActionResult DeleteItem(Guid this_id)
         {
-            var existingItem = this.collections.GetItem(id);
+            var existingItem = this.collections.GetItem(this_id);
 
             if (existingItem is null) { return NotFound(); }
 
-            this.collections.DeleteItem(id);
+            this.collections.DeleteItem(this_id);
             return NoContent();
 
         }
