@@ -18,31 +18,31 @@ namespace Catalog.Collections
             itemsColletion = database.GetCollection<Item>(collectionName);
         }
 
-        // Create Item
-        public void CreateItem(Item item) { itemsColletion.InsertOne(item); }
+        // Create Item async 
+        public async Task CreateItemAsync(Item item) { await itemsColletion.InsertOneAsync(item); }
 
         // Get all Items
-        public IEnumerable<Item> GetItems(){ return itemsColletion.Find(new BsonDocument()).ToList(); }
+        public async Task<IEnumerable<Item>> GetItemsAsync(){ return await itemsColletion.Find(new BsonDocument()).ToListAsync(); }
 
         // Delete an Item
-        public void DeleteItem(Guid this_id)
+        public async Task DeleteItemAsync(Guid this_id)
         {
             var filter = filterBuilder.Eq(item => item.Id, this_id);
-            itemsColletion.DeleteOne(filter);
+            await itemsColletion.DeleteOneAsync(filter);
         }
 
         // Get an Item 
-        public Item GetItem(Guid this_id)
+        public async Task<Item> GetItemAsync(Guid this_id)
         {
             var filter = filterBuilder.Eq(item => item.Id, this_id);
-            return itemsColletion.Find(filter).SingleOrDefault();
+            return await itemsColletion.Find(filter).SingleOrDefaultAsync();
         }
 
         // Update an Item
-        public void UpdateItem(Item item)
+        public async Task UpdateItemAsync(Item item)
         {
             var filter = filterBuilder.Eq(existingItem => existingItem.Id, item.Id);
-            itemsColletion.ReplaceOne(filter, item);
+            await itemsColletion.ReplaceOneAsync(filter, item);
         }
     }
 }

@@ -4,10 +4,10 @@ namespace Catalog.Collections
 {
     public interface IInMemoryCollections
     {
-        Item GetItem(Guid this_id);
-        IEnumerable<Item> GetItems();
-        void CreateItem(Item item);
-        void UpdateItem(Item item);
-        void DeleteItem(Guid this_id);
+        Task<Item> GetItemAsync(Guid this_id);
+        Task<IEnumerable<Item>> GetItemsAsync();
+        Task CreateItemAsync(Item item);
+        Task UpdateItemAsync(Item item);
+        Task DeleteItemAsync(Guid this_id);
     }
 }

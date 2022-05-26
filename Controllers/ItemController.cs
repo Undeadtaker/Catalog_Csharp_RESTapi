@@ -23,13 +23,13 @@ namespace Catalog.Controller
 
         // REQUEST METHODS
         [HttpGet]
-        public IEnumerable<ItemDto> GetItems() { return this.collections.GetItems().Select(item => item.AsDto()); }
+        public async Task<IEnumerable<ItemDto>> GetItemsAsync() { return (await this.collections.GetItemsAsync()).Select(item => item.AsDto()); }
 
         // GET /items/id
         [HttpGet("{this_id}")]
-        public ActionResult<ItemDto> GetItem(Guid this_id)   
+        public async Task<ActionResult<ItemDto>> GetItemAsync(Guid this_id)   
         { 
-            var item = this.collections.GetItem(this_id); 
+            var item = await this.collections.GetItemAsync(this_id); 
 
             if (item is null) {return NotFound();}
             return item.AsDto();
@@ -37,7 +37,7 @@ namespace Catalog.Controller
 
         // POST /items 
         [HttpPost]
-        public ActionResult<ItemDto> CreateItem(CreateItemDto itemDto)
+        public async Task<ActionResult<ItemDto>> CreateItemAsync(CreateItemDto itemDto)
         {
             Item item = new() 
             {
@@ -47,16 +47,16 @@ namespace Catalog.Controller
                 CreatedDate = DateTimeOffset.UtcNow
             };
 
-            this.collections.CreateItem(item);
-            return CreatedAtAction("PostAsync", new { id = item.Id }, item.AsDto());
+            await this.collections.CreateItemAsync(item);
+            return CreatedAtAction(nameof(GetItemAsync), new { id = item.Id }, item.AsDto());
 
         } 
 
         // PUT /items
         [HttpPut("{id}")]
-        public ActionResult UpdateItem(Guid id, UpdateItemDto itemDto)
+        public async Task<ActionResult> UpdateItemAsync(Guid id, UpdateItemDto itemDto)
         {
-            var existingItem = this.collections.GetItem(id);
+            var existingItem = await this.collections.GetItemAsync(id);
 
             if (existingItem is null) { return NotFound(); }
             
@@ -66,19 +66,19 @@ namespace Catalog.Controller
                 Price = itemDto.Price
             };
 
-            this.collections.UpdateItem(updatedItem);
+            await this.collections.UpdateItemAsync(updatedItem);
             return NoContent();
 
         }
 
         [HttpDelete("{this_id}")]
-        public ActionResult DeleteItem(Guid this_id)
+        public async Task<ActionResult> DeleteItemAsync(Guid this_id)
         {
-            var existingItem = this.collections.GetItem(this_id);
+            var existingItem = await this.collections.GetItemAsync(this_id);
 
             if (existingItem is null) { return NotFound(); }
 
-            this.collections.DeleteItem(this_id);
+            await this.collections.DeleteItemAsync(this_id);
             return NoContent();
 
         }
