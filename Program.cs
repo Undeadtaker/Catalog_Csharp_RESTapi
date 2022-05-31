@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 ConfigurationManager configuration = builder.Configuration;
+IWebHostEnvironment env = builder.Environment;
 
 builder.Services.AddControllers(options =>
 {
@@ -55,7 +56,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Check if the environment is development or production and enable it accordingly
+// if (env.IsDevelopment()) {app.UseHttpsRedirection(); }
 
 app.UseAuthorization();
 
